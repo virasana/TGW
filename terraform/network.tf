@@ -1,7 +1,7 @@
 module "vpc" {
   source = "terraform-aws-modules/vpc/aws"
 
-  name = "my-vpc"
+  name = var.the_name
   cidr = "10.0.0.0/16"
 
   azs             = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
@@ -14,5 +14,6 @@ module "vpc" {
   tags = {
     Terraform = "true"
     Environment = "dev"
+    Name = var.the_name
   }
 }
