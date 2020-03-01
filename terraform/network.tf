@@ -1,19 +1,27 @@
-module "vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+module "vpc_1" {
+  source = "./modules/vpc"
+  environment = "ks_one"
+  id = 1
+}
 
-  name = var.the_name
-  cidr = "10.0.0.0/16"
+module "vpc_2" {
+  source = "./modules/vpc"
+  environment = "ks_two"
+  id = 2
+}
 
-  azs             = ["eu-west-2a", "eu-west-2b", "eu-west-2c"]
-  private_subnets = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
-  public_subnets  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+module "vpc_3" {
+  source = "./modules/vpc"
+  environment = "ks_three"
+  id = 3
+}
 
-  enable_nat_gateway = true
-  enable_vpn_gateway = true
-
+resource "aws_subnet" "public11" {
+  cidr_block = "10.1.5.0/28"
+  vpc_id = module.vpc_1.vpc_id
+  availability_zone = "eu-west-2c"
   tags = {
-    Terraform = "true"
-    Environment = "dev"
-    Name = var.the_name
+    name = "public_11"
+    environment = var.environment
   }
 }

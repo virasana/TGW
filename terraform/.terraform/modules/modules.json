@@ -1,1 +1,1 @@
-{"Modules":[{"Key":"","Source":"","Dir":"."},{"Key":"vpc","Source":"terraform-aws-modules/vpc/aws","Version":"2.24.0","Dir":".terraform\\modules\\vpc"}]}
+{"Modules":[{"Key":"vpc_2","Source":"./modules/vpc","Dir":"modules/vpc"},{"Key":"vpc_3","Source":"./modules/vpc","Dir":"modules/vpc"},{"Key":"","Source":"","Dir":"."},{"Key":"vpc","Source":"./modules/vpc","Dir":"modules/vpc"},{"Key":"vpc_1","Source":"./modules/vpc","Dir":"modules/vpc"}]}
