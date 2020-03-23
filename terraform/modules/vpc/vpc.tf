@@ -10,6 +10,14 @@ output "vpc_id" {
   value = aws_vpc.vpc.id
 }
 
+output "subnet_id_private" {
+  value = aws_subnet.private.id
+}
+
+output "subnet_id_public" {
+  value = aws_subnet.public.id
+}
+
 resource "aws_subnet" "private" {
   cidr_block = "10.${var.id}.1.0/24"
   vpc_id = aws_vpc.vpc.id
