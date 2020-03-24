@@ -88,12 +88,21 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_3" {
   }
 }
 
-resource "aws_ec2_transit_gateway_route_table" "rt1" {
+resource "aws_ec2_transit_gateway_route_table" "rt" {
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
 }
 
-# TODO
-//resource "aws_ec2_transit_gateway_route_table_propagation" "propagation_1" {
-//  transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.vpc_1.id
-//  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.rt1.id
-//}
+resource "aws_ec2_transit_gateway_route_table_propagation" "propagation_1" {
+  transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.vpc_1.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.rt.id
+}
+
+resource "aws_ec2_transit_gateway_route_table_propagation" "propagation_2" {
+  transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.vpc_2.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.rt.id
+}
+
+resource "aws_ec2_transit_gateway_route_table_propagation" "propagation_3" {
+  transit_gateway_attachment_id = aws_ec2_transit_gateway_vpc_attachment.vpc_3.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.rt.id
+}
