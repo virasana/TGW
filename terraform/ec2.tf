@@ -14,13 +14,29 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
-resource "aws_instance" "public_1" {
+resource "aws_instance" "public_1a" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
   associate_public_ip_address = "true"
   key_name = var.ssh_key_name
   tags = {
-    name = "public_1"
+    name = "public_1a"
+    environment = var.environment
+  }
+
+  security_groups = [aws_security_group.ingress-all-1.id]
+
+  availability_zone = var.availability_zone
+  subnet_id = module.vpc_1.subnet_id_public
+}
+
+resource "aws_instance" "public_1b" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  associate_public_ip_address = "true"
+  key_name = var.ssh_key_name
+  tags = {
+    name = "public_1b"
     environment = var.environment
   }
 
@@ -113,22 +129,14 @@ resource "aws_security_group" "ingress-all-3" {
   }
 }
 
-resource "aws_security_group" "ingress-all-4" {
-  name = "allow-all-sg"
-  vpc_id = aws_vpc.vpc_4.id
-  ingress {
-    cidr_blocks = [
-      "0.0.0.0/0"
-    ]
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-  }
-  // Terraform removes the default rule
-  egress {
-    from_port = 0
-    to_port = 0
-    protocol = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+output "ec2_instance_public_1a_ip" {
+  value = aws_instance.public_1a.public_ip
+}
+
+output "ec2_instance_public_1b_ip" {
+  value = aws_instance.public_1b.public_ip
+}
+
+output "ec2_instance_public_2_ip" {
+  value = aws_instance.public_2.public_ip
 }
