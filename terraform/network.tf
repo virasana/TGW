@@ -2,21 +2,21 @@ module "vpc_1" {
   source = "./modules/vpc"
   environment = "ks_one"
   id = 1
-  availability_zone = "eu-west-2a"
+  availability_zone = "eu-west-1a"
 }
 
 module "vpc_2" {
   source = "./modules/vpc"
   environment = "ks_two"
   id = 2
-  availability_zone = "eu-west-2a"
+  availability_zone = "eu-west-1a"
 }
 
 module "vpc_3" {
   source = "./modules/vpc"
   environment = "ks_three"
   id = 3
-  availability_zone = "eu-west-2a"
+  availability_zone = "eu-west-1a"
 }
 
 resource "aws_vpc" "vpc_4" {
@@ -30,7 +30,7 @@ resource "aws_vpc" "vpc_4" {
 resource "aws_subnet" "public1_alternate_zone" {
   cidr_block = "10.4.5.0/28"
   vpc_id = aws_vpc.vpc_4.id
-  availability_zone = "eu-west-2b"
+  availability_zone = "eu-west-1b"
   tags = {
     name = "public_alternate_zone"
     environment = var.environment
@@ -61,7 +61,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_4_alternate_zone" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_1" {
   dns_support = "enable"
   vpc_id = module.vpc_1.vpc_id
-  subnet_ids = [module.vpc_1.subnet_id_private]
+  subnet_ids = [module.vpc_1.subnet_id_public]
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   tags = {
     name = "vpc_1"
@@ -71,11 +71,12 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_1" {
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_2" {
   dns_support = "enable"
   vpc_id = module.vpc_2.vpc_id
-  subnet_ids = [module.vpc_2.subnet_id_private]
+  subnet_ids = [module.vpc_2.subnet_id_public]
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
   tags = {
     name = "vpc_2"
   }
+  depends_on = [module.vpc_1, module.vpc_2]
 }
 
 resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_3" {
@@ -86,6 +87,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_3" {
   tags = {
     name = "vpc_3"
   }
+  depends_on = [module.vpc_1, module.vpc_2]
 }
 
 resource "aws_ec2_transit_gateway_route_table" "rt" {

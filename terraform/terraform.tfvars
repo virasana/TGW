@@ -1,3 +1,6 @@
-aws_region = "eu-west-2"
+aws_region = "eu-west-1"
+availability_zone = "eu-west-1a"
 aws_account = "624368621157"
 environment = "ksone"
+instance_type = "t2.nano"
+ssh_key_name = "ksone"
