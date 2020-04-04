@@ -14,6 +14,11 @@ data "aws_ami" "ubuntu" {
   owners = ["099720109477"] # Canonical
 }
 
+output "ec2_instance_public_1a_ip" {
+  value = format("ssh ubuntu@%s", aws_instance.public_1a.public_ip)
+}
+
+
 resource "aws_instance" "public_1a" {
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
@@ -25,6 +30,8 @@ resource "aws_instance" "public_1a" {
   }
 
   security_groups = [aws_security_group.ingress-all-1.id]
+
+  user_data = templatefile("${path.module}/files/init.sh", {})
 
   availability_zone = var.availability_zone
   subnet_id = module.vpc_1.subnet_id_public
@@ -40,6 +47,7 @@ resource "aws_instance" "public_1b" {
     environment = var.environment
   }
 
+  user_data = templatefile("${path.module}/files/init.sh", {})
   security_groups = [aws_security_group.ingress-all-1.id]
 
   availability_zone = var.availability_zone
@@ -57,6 +65,7 @@ resource "aws_instance" "public_2" {
     environment = var.environment
   }
 
+  user_data = templatefile("${path.module}/files/init.sh", {})
   security_groups = [aws_security_group.ingress-all-2.id]
 
   availability_zone = var.availability_zone
@@ -129,14 +138,10 @@ resource "aws_security_group" "ingress-all-3" {
   }
 }
 
-output "ec2_instance_public_1a_ip" {
-  value = aws_instance.public_1a.public_ip
-}
-
 output "ec2_instance_public_1b_ip" {
-  value = aws_instance.public_1b.public_ip
+  value = format("ssh ubuntu@%s", aws_instance.public_1b.public_ip)
 }
 
 output "ec2_instance_public_2_ip" {
-  value = aws_instance.public_2.public_ip
+  value = format("ssh ubuntu@%s", aws_instance.public_2.public_ip)
 }
