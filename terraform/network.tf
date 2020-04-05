@@ -3,6 +3,7 @@ module "vpc_1" {
   environment = "ks_one"
   id = 1
   availability_zone = "eu-west-1a"
+  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
 }
 
 module "vpc_2" {
@@ -10,6 +11,7 @@ module "vpc_2" {
   environment = "ks_two"
   id = 2
   availability_zone = "eu-west-1a"
+  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
 }
 
 module "vpc_3" {
@@ -17,6 +19,7 @@ module "vpc_3" {
   environment = "ks_three"
   id = 3
   availability_zone = "eu-west-1a"
+  transit_gateway_id = aws_ec2_transit_gateway.tgw.id
 }
 
 resource "aws_ec2_transit_gateway" "tgw" {

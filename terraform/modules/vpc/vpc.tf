@@ -23,7 +23,7 @@ output "subnet_id_tgw" {
 }
 
 resource "aws_subnet" "private" {
-  cidr_block = "10.${var.id}.1.0/24"
+  cidr_block = "10.${var.id}.0.0/24"
   vpc_id = aws_vpc.vpc.id
   availability_zone = var.availability_zone
   tags = {
@@ -33,7 +33,7 @@ resource "aws_subnet" "private" {
 }
 
 resource "aws_subnet" "public" {
-  cidr_block = "10.${var.id}.2.0/24"
+  cidr_block = "10.${var.id}.1.0/24"
   vpc_id = aws_vpc.vpc.id
   availability_zone = var.availability_zone
   tags = {
@@ -43,7 +43,7 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "tgw" {
-  cidr_block = "10.${var.id}.3.0/24"
+  cidr_block = "10.${var.id}.2.0/24"
   vpc_id = aws_vpc.vpc.id
   availability_zone = var.availability_zone
   tags = {
@@ -66,6 +66,8 @@ resource "aws_route_table" "route_table_public" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw.id
   }
+
+
 }
 
 resource "aws_route_table_association" "route_table_association_public" {
