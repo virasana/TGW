@@ -85,6 +85,24 @@ resource "aws_instance" "public_2b" {
   subnet_id = module.vpc_2.subnet_id_public
 }
 
+resource "aws_instance" "public_3a" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = var.instance_type
+  associate_public_ip_address = "true"
+  key_name = var.ssh_key_name
+
+  tags = {
+    name = "public_3a"
+    environment = var.environment
+  }
+
+  user_data = templatefile("${path.module}/files/init.sh", {})
+  vpc_security_group_ids = [aws_security_group.ingress-all-3.id]
+
+  availability_zone = var.availability_zone
+  subnet_id = module.vpc_3.subnet_id_public
+}
+
 resource "aws_key_pair" "ec2" {
   public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDe5rolPThs7BB9Us7zmdPqkJHhkeMt4k8SW16HCxdgi5hKhHCJxZBeCS7Ao+Wvymt7Mj1JrEhS0yxGl3UM/gjQfeWzPc3iWmiirX+n/Wqo0MKW1XAaT9yrzlYf8ZVESNLblfpEezZUH2DA6Mu7fSDt+Otvi8bPUyTb0jGNiAH5vYcauVWpe2JjYQ+JqpuSQf1o7PYcf+gg+69jTBu91RVAw08VtOBat7sLRXPQwKFaKkHA4OL7dEraRx5Qh8ZirrAi8TtjPnAHG4X6/2X371j4CJD6GjO4X7jdEihtrZRv5XFn9wcZwH0B41fr7pSmKW+S3YzOppgFvf/Yl8qAp/Y9 jean-pierre@LAPPIE2"
   key_name = "ksone"
@@ -165,4 +183,8 @@ output "ec2_instance_public_2a_ip" {
 
 output "ec2_instance_public_2b_ip" {
   value = format("ssh ubuntu@%s", aws_instance.public_2b.public_ip)
+}
+
+output "ec2_instance_public_3a_ip" {
+  value = format("ssh ubuntu@%s", aws_instance.public_3a.public_ip)
 }

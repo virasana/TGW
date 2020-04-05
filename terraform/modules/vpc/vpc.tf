@@ -47,7 +47,7 @@ resource "aws_subnet" "tgw" {
   vpc_id = aws_vpc.vpc.id
   availability_zone = var.availability_zone
   tags = {
-    name = "public_${var.id}"
+    name = "tgw_${var.id}"
     environment = var.environment
   }
 }
@@ -60,17 +60,21 @@ resource "aws_internet_gateway" "gw" {
   }
 }
 
-resource "aws_route_table" "route_table_public" {
+resource "aws_route_table" "route_table" {
   vpc_id = aws_vpc.vpc.id
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.gw.id
   }
 
-
+  route {
+    cidr_block = "10.0.0.0/8"
+    transit_gateway_id = var.transit_gateway_id
+  }
 }
 
 resource "aws_route_table_association" "route_table_association_public" {
-  route_table_id = aws_route_table.route_table_public.id
+  route_table_id = aws_route_table.route_table.id
   subnet_id = aws_subnet.public.id
 }
+
