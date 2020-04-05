@@ -67,10 +67,16 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "vpc_3" {
 
 resource "aws_ec2_transit_gateway_route_table" "rt_default" {
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  tags = {
+    name = "rt_default"
+  }
 }
 
 resource "aws_ec2_transit_gateway_route_table" "rt_restricted" {
   transit_gateway_id = aws_ec2_transit_gateway.tgw.id
+  tags = {
+    name = "rt_restricted"
+  }
 }
 
 resource "aws_ec2_transit_gateway_route_table_propagation" "propagation_d_1" {
